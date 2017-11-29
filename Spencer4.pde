@@ -2,18 +2,21 @@ import processing.opengl.*;
 import peasy.*;
 import peasy.org.apache.commons.math.*;
 import peasy.org.apache.commons.math.geometry.*;
+import processing.sound.*;
 
+
+SoundFile s1;
 
 PeasyCam cam;
 
 
 int cols,rows;
-int scl=20;
-int w=3840;
+int scl=30;
+int w=4840;
 int h=1600;
 float flying=0;
 float[][] terrain;
-int amount=600;
+int amount=300;
 
 
 PImage photo;//
@@ -25,15 +28,20 @@ ArrayList rain = new ArrayList();
 ArrayList splash = new ArrayList();
 float current;
 float reseed = random(0, .2);
+
+
+
 void setup()
 {  
-    photo = loadImage("img.jpg");
+    
 
 
-cam=new PeasyCam(this,1800);
+//cam=new PeasyCam(this,1800);
   size(3840, 768, P3D);
   
-  
+   s1 = new SoundFile(this, "rugla.mp3");
+   s1.loop();
+   
   colorMode(RGB, 100);
   background(0);
   rain.add(new Rain());
@@ -55,7 +63,7 @@ terrain= new float[cols][rows];
   
   beginCamera();
 camera();
-rotateX(-PI/4);
+rotateX(-PI/3);
 //rotateY(2*PI);
 rotateZ(-6*PI);
 endCamera();
@@ -77,12 +85,13 @@ void draw()
 //rect(0, 0, 100, 100);
 //popStyle();
 //popMatrix();
-
+float mouseControlX=map(mouseX,0,width,-1.5,1.5);
+float mouseControlY=map(mouseY,0,height,0,1.5);
 
 pushMatrix();
 
 rotateX(-11*PI/6);
-
+rotateZ(PI/18*mouseControlX);
   //println(rain.size());
   
   if ((millis()-current)/1>reseed &&
@@ -135,7 +144,7 @@ popMatrix();
 
 //pushStyle();
 //background(0);
-stroke(100,4);
+stroke(100,5);
 //noFill();
 fill(0,0,50,24);
 noFill();
@@ -143,9 +152,12 @@ noFill();
 
 translate(width/2,height/2);
 rotateX(-4*PI/3);
- 
+ //rotateZ(-PI/3*mouseControlX);
+ rotateZ(PI/18*mouseControlX);
 translate(-w/2,-h/2);
 
+
+print("\n");
 
 for(int y=0;y<rows-1;y++){
   
@@ -182,7 +194,7 @@ public class Rain
   float col;
   public Rain()
   {
-    position = new PVector(random(-width, width), -500, random(-800, 800));
+    position = new PVector(random(0, width), -500, random(-800, 800));
     pposition = position;
     speed = new PVector(0, 0);
     col = random(30, 60);
@@ -203,7 +215,7 @@ public class Rain
   }
   void gravity()
   {
-    speed.y += .6;
+    speed.y += .2;
     speed.x += .01;
     position.add(speed);
   }
