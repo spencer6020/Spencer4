@@ -71,7 +71,7 @@ endCamera();
 void draw()
 {count+=0.03;
 
- background (0,0,0,1);
+ background (0,0,0);
 
 //pushMatrix();
 //pushStyle();
@@ -215,7 +215,7 @@ public class Rain
   }
   void gravity()
   {
-    speed.y += .2;
+    speed.y += random(1.8,.2);
     speed.x += .01;
     position.add(speed);
   }
